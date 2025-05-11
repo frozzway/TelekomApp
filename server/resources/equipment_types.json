@@ -1,0 +1,18 @@
+[
+  {
+    "name": "TP-Link TL-WR74",
+    "serial_number_mask": "XXAAAAAXAA"
+  },
+  {
+    "name": "D-Link DIR-300",
+    "serial_number_mask": "NXXAAXZXaa"
+  },
+  {
+    "name": "D-Link DIR-300 E",
+    "serial_number_mask": "NAAAAXZXXX"
+  },
+  {
+    "name": "Test Type",
+    "serial_number_mask": "NNNN"
+  }
+]

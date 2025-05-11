@@ -1,0 +1,35 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: telekom_server
+    environment:
+      - db_host=mysql
+      - db_username=telekom
+      - db_port=3306
+      - server_environment=production
+      - server_port=8000
+
+  web:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: telekom_web
+    ports:
+      - "5174:80"
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: telekom_db_2
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: TelekomTest
+      MYSQL_USER: telekom
+      MYSQL_PASSWORD: 123
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
