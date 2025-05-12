@@ -93,7 +93,7 @@ class EquipmentService:
         """
 
         entity = self._get_equipment(equipment_id)
-        self.session.delete(entity)
+        entity.is_deleted = True
         self.session.commit()
 
     def _get_equipment(self, equipment_id: int) -> Equipment:
@@ -108,7 +108,7 @@ class EquipmentService:
         """
 
         equipment = self.session.query(Equipment) \
-            .where(Equipment.id == equipment_id) \
+            .where((Equipment.id == equipment_id) & (Equipment.is_deleted.is_(False))) \
             .scalar()
         if equipment is None:
             raise HTTPError(status=404)
