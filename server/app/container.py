@@ -4,6 +4,7 @@ from app.database import session_maker
 from app.services import EquipmentService
 from app.services import EquipmentTypeService
 from app.services import PrefillService
+from app.services import AuthService
 
 
 class Container(containers.DeclarativeContainer):
@@ -19,5 +20,9 @@ class Container(containers.DeclarativeContainer):
     )
     prefill_service = providers.Factory(
         PrefillService,
+        session=session,
+    ),
+    auth_service = providers.Factory(
+        AuthService,
         session=session,
     )
