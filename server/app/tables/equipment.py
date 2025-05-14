@@ -1,19 +1,12 @@
 import re
 
 from sqlalchemy import ForeignKey, UniqueConstraint, String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
+
+from app.tables import EntityWithId
 
 
-class Base(DeclarativeBase):
-    __abstract__ = True
-
-
-class DeclarativeBaseWithId(Base):
-    __abstract__ = True
-    id: Mapped[int] = mapped_column(primary_key=True)
-
-
-class Equipment(DeclarativeBaseWithId):
+class Equipment(EntityWithId):
     """Оборудование"""
 
     __tablename__ = "Equipment"
@@ -29,7 +22,7 @@ class Equipment(DeclarativeBaseWithId):
     )
 
 
-class EquipmentType(DeclarativeBaseWithId):
+class EquipmentType(EntityWithId):
     """Тип оборудования"""
 
     __tablename__ = "EquipmentType"
