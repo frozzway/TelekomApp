@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     server_host: str = '0.0.0.0'
     server_port: int = '5007'
     timezone: str = 'Asia/Yekaterinburg'
-    server_environment: str = 'development'
+    server_environment: str = ''
 
     db_username: str = 'postgres'
     db_password: str = '123'
