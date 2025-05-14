@@ -43,7 +43,7 @@ export default defineComponent({
           key: 'edit-action',
           label: '',
           thClass: 'icon-column',
-          tdClass: 'text-center align-middle'
+          tdClass: 'text-center'
         },
           'id',
         {
@@ -56,7 +56,8 @@ export default defineComponent({
         },
         {
           key: 'note',
-          label: 'Примечание'
+          label: 'Примечание',
+          tdClass: 'text-column'
         },
         {
           key: 'delete-action',
@@ -231,7 +232,7 @@ export default defineComponent({
       striped
       hover
       responsive="true"
-      class="mt-2"
+      class="mt-2 overflow-x-auto"
       :provider="provider"
       :fields="fields"
       :busy="isBusy"
@@ -291,5 +292,10 @@ export default defineComponent({
 
 ::v-deep(.icon-column) {
   width: 50px;
+}
+
+::v-deep(.text-column) {
+  word-break: break-word;
+  min-width: 120px;
 }
 </style>
