@@ -1,10 +1,13 @@
 import json
 from pathlib import Path
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import EquipmentTypePrefillDto
-from app.tables import EquipmentType, Equipment
+from app.services import AuthService
+from app.tables import EquipmentType, Equipment, User, Role
+from app.roles import Role as RoleEnum
 
 
 class PrefillService:
@@ -39,6 +42,36 @@ class PrefillService:
             self.session.add(
                 Equipment(
                     equipment_type_id=equipment_type.id,  # type: ignore
-                    serial_number=f'{i:04}'
-                ))
+                    serial_number=f'{i:04}'))
+        self.session.commit()
+
+    def prefill_users(self):
+        """Метод предзаполнения пользователей"""
+
+        self._create_admin_account()
+
+    def _create_admin_account(self):
+        """Создать аккаунт под администратора"""
+
+        password_hash = AuthService.hash_string('qwerty123!')
+        root_role = self.session.query(Role).where(Role.name == RoleEnum.Root.value).scalar()
+        admin = self.session.query(User).where(User.email == 'administrator@localhost.ru').scalar()
+        if admin:
+            return
+        admin = User(
+            name='Admin',
+            middle_name='Admin',
+            surname='Admin',
+            email='administrator@localhost.ru',
+            hashed_password=password_hash,
+            roles=[root_role])
+        self.session.add(admin)
+        self.session.commit()
+
+    def create_roles(self):
+        role_names = self.session.scalars(select(Role.name))
+        for role in RoleEnum:
+            if role.value not in role_names:
+                entity = Role(name=role.value)
+                self.session.add(entity)
         self.session.commit()

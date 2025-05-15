@@ -15,6 +15,8 @@ def run_migrations():
 def prefill_data(prefill_service: PrefillService):
     prefill_service.prefill_equipment_types()
     prefill_service.prefill_equipments()
+    prefill_service.create_roles()
+    prefill_service.prefill_users()
 
 
 def start_cherrypy():
