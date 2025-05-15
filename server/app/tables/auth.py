@@ -4,18 +4,20 @@ from sqlalchemy import ForeignKey, Table, Column, TIMESTAMP, String, Text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column, relationship
 
-from app.tables import EntityWithUUID, EntityWithId, DeclarativeBase
+from app.tables import EntityWithUUID, EntityWithId, Base
 
 
 user_role_table = Table(
     "UserRoles",
-    DeclarativeBase.metadata,
+    Base.metadata,
     Column("UserId", ForeignKey("Users.id")),
     Column("RoleId", ForeignKey("Roles.id")),
 )
 
 
 class User(EntityWithUUID):
+    """Пользователь"""
+
     __tablename__ = 'Users'
 
     name: Mapped[str] = mapped_column(String(256))
@@ -30,8 +32,9 @@ class User(EntityWithUUID):
 
 
 class RefreshSession(EntityWithId):
+    """Сессия для обновления JWT"""
+
     __tablename__ = 'RefreshSessions'
-    id: Mapped[int] = mapped_column(primary_key=True)
 
     user_id: Mapped[int] = mapped_column(ForeignKey('Users.id'))
     token_hash: Mapped[str] = mapped_column(Text)
@@ -42,6 +45,7 @@ class RefreshSession(EntityWithId):
 
 
 class Role(EntityWithUUID):
+    """Роль пользователя в системе"""
+
     __tablename__ = 'Roles'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column()
+    name: Mapped[str] = mapped_column(unique=True)

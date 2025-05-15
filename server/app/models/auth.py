@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, UUID4
 
 
 class Token(BaseModel):
@@ -12,5 +12,5 @@ class Login(BaseModel):
 
 
 class UserJWT(BaseModel):
-    id: int
+    id: UUID4
     roles: list[str]
