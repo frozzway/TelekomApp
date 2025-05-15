@@ -12,7 +12,7 @@ url_params = {
 }
 
 url_object = URL.create(
-    'mysql+pymysql',
+    settings.db_dialect,
     database=settings.db_database,
     **url_params
 )

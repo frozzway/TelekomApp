@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     db_host: str = '127.0.0.1'
     db_port: str = '5432'
     db_database: str = 'TelekomTest'
+    db_dialect: str = 'mysql+pymysql'
     db_migrations_path: str = str(Path.cwd() / 'alembic_migrations')
 
     jwt_expires_s: int = 60 * 30
