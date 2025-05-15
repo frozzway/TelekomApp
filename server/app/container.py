@@ -21,7 +21,7 @@ class Container(containers.DeclarativeContainer):
     prefill_service = providers.Factory(
         PrefillService,
         session=session,
-    ),
+    )
     auth_service = providers.Factory(
         AuthService,
         session=session,
