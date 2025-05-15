@@ -18,7 +18,6 @@ def cors_tool():
         cherrypy.response.status = 200
 
         def _preflight_response():
-            resp.status = 200
             return ''
 
         req.handler = _preflight_response
