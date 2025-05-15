@@ -18,3 +18,4 @@ class EntityWithUUID(Base):
 
 
 from .equipment import Equipment, EquipmentType
+from .auth import User, Role, RefreshSession
