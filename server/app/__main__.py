@@ -34,6 +34,7 @@ def start_cherrypy():
             'tools.json_out.on': True,
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
             'tools.pydantic_dump.on': True,
+            'tools.auth_tool.on': True,
         }
     }
 
