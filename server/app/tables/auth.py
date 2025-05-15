@@ -48,4 +48,4 @@ class Role(EntityWithUUID):
     """Роль пользователя в системе"""
 
     __tablename__ = 'Roles'
-    name: Mapped[str] = mapped_column(unique=True)
+    name: Mapped[str] = mapped_column(String(256), unique=True)
