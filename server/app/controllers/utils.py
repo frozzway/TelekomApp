@@ -1,4 +1,5 @@
 from typing import Type, TypeVar
+from http import HTTPStatus
 
 from cherrypy import HTTPError
 from pydantic import BaseModel, ValidationError
@@ -14,17 +15,17 @@ def make_model(model_type: Type[T], data: dict | list) -> T | list[T]:
         return [dict_to_model(model_type, i) for i in data]
     elif isinstance(data, dict):
         return dict_to_model(model_type, data)
-    raise HTTPError(422, "Invalid data")
+    raise HTTPError(HTTPStatus.UNPROCESSABLE_ENTITY, "Invalid data")
 
 
 def dict_to_model(model_type: Type[T], data: dict) -> T:
     if not isinstance(data, dict):
-        raise HTTPError(422, "Invalid data")
+        raise HTTPError(HTTPStatus.UNPROCESSABLE_ENTITY, "Invalid data")
 
     try:
         return model_type(**data)
     except ValidationError as e:
-        raise HTTPError(422, e.json())
+        raise HTTPError(HTTPStatus.UNPROCESSABLE_ENTITY, e.json())
 
 
 def make_model_paginated(model_type: Type[T], params: dict) -> PaginatedQuery[T]:
@@ -44,4 +45,4 @@ def make_model_paginated(model_type: Type[T], params: dict) -> PaginatedQuery[T]
             filter=filters,
             **pagination_values)
     except ValidationError as e:
-        raise HTTPError(422, e.json())
+        raise HTTPError(HTTPStatus.UNPROCESSABLE_ENTITY, e.json())
