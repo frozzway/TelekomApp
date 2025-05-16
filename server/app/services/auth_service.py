@@ -77,7 +77,7 @@ class AuthService:
             'nbf': now,
             'exp': now + timedelta(seconds=settings.jwt_expires_s),
             'sub': str(user_data.id),
-            'user': user_data.model_dump(),
+            'user': user_data.model_dump(mode='json'),
         }
         token = jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
         return models.Token(access_token=token, refresh_token=secrets.token_hex(32))
