@@ -25,11 +25,8 @@ class EquipmentService:
         """
         Метод создания сущности 'Оборудование'
 
-        Arguments:
-            dto: объект передачи данных для сущности 'Оборудование'
-
-        Returns:
-            Модель отображения результата операции создания сущности 'Оборудование'
+        :param dto: Объект передачи данных для сущности 'Оборудование'
+        :return: Модель отображения результата операции создания сущности 'Оборудование'
         """
 
         equipment_type = self.equipment_type_service.get_equipment_type(dto.equipment_type_id)
@@ -65,11 +62,8 @@ class EquipmentService:
         """
         Метод редактирования сущности 'Оборудование'
 
-        Arguments:
-            dto: объект передачи данных для сущности 'Оборудование'
-
-        Returns:
-            Модель отображения сущности 'Оборудование'
+        :param dto: Объект передачи данных для сущности 'Оборудование'
+        :return: Модель отображения сущности 'Оборудование'
         """
 
         entity = self._get_equipment(dto.id)
@@ -88,8 +82,7 @@ class EquipmentService:
         """
         Метод удаления сущности 'Оборудование'
 
-        Arguments:
-            equipment_id: идентификатор сущности 'Оборудование'
+        :param equipment_id: идентификатор сущности 'Оборудование'
         """
 
         entity = self._get_equipment(equipment_id)
@@ -100,11 +93,8 @@ class EquipmentService:
         """
         Метод получения сущности 'Оборудование'
 
-        Arguments:
-            equipment_id: идентификатор сущности 'Оборудование'
-
-        Returns:
-            Сущность 'Оборудование'
+        :param equipment_id: идентификатор сущности 'Оборудование'
+        :return: Сущность 'Оборудование'
         """
 
         equipment = self.session.query(Equipment) \
@@ -118,11 +108,8 @@ class EquipmentService:
         """
         Метод получения табличных данных сущности 'Оборудование'
 
-        Arguments:
-            query: объект передачи данных с фильтрами и параметрами пагинации
-
-        Returns:
-            Данные для подстановки в таблицу
+        :param query: Объект передачи данных с фильтрами и параметрами пагинации
+        :return: Данные для подстановки в таблицу
         """
 
         filters = query.filter.model_dump(exclude_unset=True) if query.filter else {}
@@ -156,11 +143,8 @@ class EquipmentService:
         """
         Метод получения сущности 'Оборудование'
 
-        Arguments:
-            equipment_id: идентификатор сущности 'Оборудование'
-
-        Returns:
-            Модель отображения сущности 'Оборудование'
+        :param equipment_id: идентификатор сущности 'Оборудование'
+        :return: Модель отображения сущности 'Оборудование'
         """
 
         equipment = self._get_equipment(equipment_id)

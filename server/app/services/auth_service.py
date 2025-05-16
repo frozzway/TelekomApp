@@ -40,6 +40,7 @@ class AuthService:
     def verify_token(token: str) -> models.UserJWT:
         """
         Валидировать Access токен и извлечь из него данные о пользователе
+
         :param token: Access токен
         :return: Модель отображения пользователя
         """
@@ -62,6 +63,7 @@ class AuthService:
     def create_tokens(user: tables.User) -> models.Token:
         """
         Выпустить Access и Refresh токены для пользователя
+
         :param user: пользователь
         :return: Модель отображения с Access и Refresh токенами
         """
@@ -83,6 +85,7 @@ class AuthService:
     def get_refresh_session(self, hashed_token: str) -> tables.RefreshSession:
         """
         Получить сущность "Сессия для обновления JWT"
+
         :param hashed_token: хэшированное значение Refresh токена
         :return: Сущность "Сессия для обновления JWT"
         """
@@ -96,6 +99,7 @@ class AuthService:
     def login(self, email: str, password: str, ip_address: str, user_agent: str) -> models.Token:
         """
         Авторизовать пользователя по учетным данным
+
         :param email: почтовый адрес
         :param password: пароль
         :param ip_address: ip адрес из запроса
@@ -119,6 +123,7 @@ class AuthService:
     def refresh_token(self, refresh_token: str, ip_address: str, user_agent: str) -> models.Token:
         """
         Обновить сессию, выпустив новый Access токен и заменив Refresh
+
         :param refresh_token: Токен Refresh для выпуска Access
         :param ip_address: ip адрес из запроса
         :param user_agent: юзер-агент из запроса
@@ -142,6 +147,7 @@ class AuthService:
     def _remove_expired_sessions(self, user_id: int) -> None:
         """
         Удалить из базы все сессии с истеченным сроком жизни для пользователя
+
         :param user_id: Идентификатор пользователя
         """
 
@@ -155,6 +161,7 @@ class AuthService:
                                 user_id: int, ip_address: str, user_agent: str) -> tables.RefreshSession:
         """
         Создать сущность "Сессия для обновления JWT" для пользователя
+
         :param refresh_token: Токен Refresh для выпуска Access
         :param user_id: идентификатор пользователя
         :param ip_address: ip адрес из запроса

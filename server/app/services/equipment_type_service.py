@@ -19,11 +19,8 @@ class EquipmentTypeService:
         """
         Метод получения табличных данных сущности
 
-        Arguments:
-            query: объект передачи данных с фильтрами и параметрами пагинации
-
-        Returns:
-            Данные для подстановки в таблицу
+        :param query: Объект передачи данных с фильтрами и параметрами пагинации
+        :return: Данные для подстановки в таблицу
         """
 
         filters = query.filter.model_dump(exclude_unset=True) if query.filter else {}
@@ -46,11 +43,8 @@ class EquipmentTypeService:
         """
         Метод получения сущности
 
-        Arguments:
-            equipment_type_id: идентификатор сущности
-
-        Returns:
-            Сущность 'Тип оборудования'
+        :param equipment_type_id: Идентификатор сущности
+        :return: Сущность 'Тип оборудования'
         """
 
         equipment_type = self.session.query(EquipmentType) \
