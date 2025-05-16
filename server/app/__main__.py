@@ -26,20 +26,21 @@ def start_cherrypy():
         'server.socket_port': settings.server_port,
         'engine.autoreload.on': False,
         'tools.cors_tool.on': True,
+        'tools.pydantic_dump.on': True,
+        'tools.json_in.on': True,
+        'tools.json_out.on': True
     })
 
-    config = {
+    rest_config = {
         '/': {
-            'tools.json_in.on': True,
-            'tools.json_out.on': True,
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.pydantic_dump.on': True,
             'tools.auth_tool.on': True,
         }
     }
 
-    cherrypy.tree.mount(controllers.EquipmentController(), '/api/equipment', config=config)
-    cherrypy.tree.mount(controllers.EquipmentTypeController(), '/api/equipment-type', config=config)
+    cherrypy.tree.mount(controllers.EquipmentController(), '/api/equipment', config=rest_config)
+    cherrypy.tree.mount(controllers.EquipmentTypeController(), '/api/equipment-type', config=rest_config)
+    cherrypy.tree.mount(controllers.AccountController(), '/api/account')
     cherrypy.engine.start()
     cherrypy.engine.block()
 
