@@ -28,7 +28,8 @@ def start_cherrypy():
         'tools.cors_tool.on': True,
         'tools.pydantic_dump.on': True,
         'tools.json_in.on': True,
-        'tools.json_out.on': True
+        'tools.json_out.on': True,
+        'error_page.default': tools.jsonify_error
     })
 
     rest_config = {
