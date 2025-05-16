@@ -12,6 +12,12 @@ class AccountController:
     @cherrypy.expose
     @inject
     def login(self, auth_service: AuthServiceDp, **kwargs) -> models.Token:
+        """
+        Метод авторизации пользователя по учетным данным
+        :param auth_service: Сервис авторизации
+        :return: Access и Refresh токены
+        """
+
         dto = make_model(models.Login, cherrypy.request.json)
         return auth_service.login(
             email=dto.username,  # type: ignore
@@ -22,6 +28,13 @@ class AccountController:
     @cherrypy.expose
     @inject
     def refresh_session(self, refresh_token: str, auth_service: AuthServiceDp, **kwargs) -> models.Token:
+        """
+        Метод обновления сессии пользователя
+        :param refresh_token: Токен обновления сессии
+        :param auth_service: Сервис авторизации
+        :return: Access и Refresh токены новой сессии
+        """
+
         return auth_service.refresh_token(
             refresh_token=refresh_token,
             ip_address=cherrypy.request.remote.ip,
