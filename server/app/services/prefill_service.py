@@ -69,6 +69,8 @@ class PrefillService:
         self.session.commit()
 
     def create_roles(self):
+        """Записать роли в базу данных"""
+
         role_names = self.session.scalars(select(Role.name))
         for role in RoleEnum:
             if role.value not in role_names:
