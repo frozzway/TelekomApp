@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, ClassVar
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field
 
@@ -36,6 +36,8 @@ class EquipmentFilterDto(BaseModel):
     note: str | None = Field(None)
     equipment_type_id: int | None = Field(None)
     serial_number: str | None = Field(None)
+
+    contains_filters: ClassVar = ('note', 'serial_number')
 
 
 class EquipmentTypeVm(BaseModel):

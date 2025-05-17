@@ -115,19 +115,24 @@ class EquipmentService:
         filters = query.filter.model_dump(exclude_unset=True) if query.filter else {}
         filters['is_deleted'] = False
 
+        filter_conditions = [
+            getattr(Equipment, key) == value
+            for key, value in filters.items() if key not in EquipmentFilterDto.contains_filters
+        ]
+
+        search_conditions = [
+            getattr(Equipment, key).contains(value)
+            for key, value in filters.items() if key in EquipmentFilterDto.contains_filters
+        ]
+
         total_count = -1
         if query.require_total_count:
-            count_stmt = select(func.count()).select_from(Equipment).filter_by(**filters)
+            count_stmt = select(func.count()).select_from(Equipment).filter(*filter_conditions, *search_conditions)
             total_count = self.session.execute(count_stmt).scalar_one()
-
-        conditions = [
-            getattr(Equipment, key) == value
-            for key, value in filters.items()
-        ]
 
         stmt = select(Equipment, EquipmentType.name) \
             .join(EquipmentType, Equipment.equipment_type_id == EquipmentType.id) \
-            .filter(*conditions) \
+            .filter(*filter_conditions, *search_conditions) \
             .order_by(Equipment.id)
 
         if query.skip is not None:
