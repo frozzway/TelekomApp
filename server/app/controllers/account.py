@@ -27,15 +27,13 @@ class AccountController:
 
     @cherrypy.expose
     @inject
-    def refresh_session(self, refresh_token: str, auth_service: AuthServiceDp, **kwargs) -> models.Token:
+    def refresh_session(self, auth_service: AuthServiceDp, **kwargs) -> models.Token:
         """
         Метод обновления сессии пользователя
-        :param refresh_token: Токен обновления сессии
         :param auth_service: Сервис авторизации
         :return: Access и Refresh токены новой сессии
         """
 
         return auth_service.refresh_token(
-            refresh_token=refresh_token,
             ip_address=cherrypy.request.remote.ip,
             user_agent=cherrypy.request.headers.get('User-Agent', ''))

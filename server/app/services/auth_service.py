@@ -3,6 +3,7 @@ from http import HTTPStatus
 import secrets
 
 import bcrypt
+import cherrypy
 from cherrypy import HTTPError
 from jose import JWTError, jwt
 from pydantic import ValidationError
@@ -118,18 +119,42 @@ class AuthService:
         refresh_session = self._create_refresh_session(tokens.refresh_token, user.id, ip_address, user_agent)
         self.session.add(refresh_session)
         self.session.commit()
+        self._set_refresh_token(tokens.refresh_token)
         return tokens
 
-    def refresh_token(self, refresh_token: str, ip_address: str, user_agent: str) -> models.Token:
+    def _get_refresh_token(self) -> str:
+        """
+        Получить Refresh Token из cookie
+        :return: Refresh Token
+        """
+
+        if cookie := cherrypy.request.cookie.get(settings.jwt_cookie_name):
+            return cookie.value
+        raise self.exception
+
+    @staticmethod
+    def _set_refresh_token(token: str) -> None:
+        """
+        Установить Refresh Token в cookie
+        :param token: Значение токена
+        """
+
+        cherrypy.response.cookie[settings.jwt_cookie_name] = token
+        cherrypy.response.cookie[settings.jwt_cookie_name]['httponly'] = True
+        cherrypy.response.cookie[settings.jwt_cookie_name]['secure'] = True
+        cherrypy.response.cookie[settings.jwt_cookie_name]['path'] = '/'
+        cherrypy.response.cookie[settings.jwt_cookie_name]['samesite'] = 'Strict'
+        cherrypy.response.cookie[settings.jwt_cookie_name]['expires'] = settings.jwt_refresh_token_expires_s
+
+    def refresh_token(self, ip_address: str, user_agent: str) -> models.Token:
         """
         Обновить сессию, выпустив новый Access токен и заменив Refresh
 
-        :param refresh_token: Токен Refresh для выпуска Access
         :param ip_address: ip адрес из запроса
         :param user_agent: юзер-агент из запроса
         :return: Модель отображения с Access и Refresh токенами
         """
-
+        refresh_token = self._get_refresh_token()
         hashed_token = self.hash_string(refresh_token, random_salt=False)
         refresh_session = self.get_refresh_session(hashed_token)
         if not refresh_session:
@@ -142,6 +167,7 @@ class AuthService:
         new_refresh_session = self._create_refresh_session(new_tokens.refresh_token, user_id, ip_address, user_agent)
         self.session.add(new_refresh_session)
         self.session.commit()
+        self._set_refresh_token(new_tokens.refresh_token)
         return new_tokens
 
     def _remove_expired_sessions(self, user_id: int) -> None:
