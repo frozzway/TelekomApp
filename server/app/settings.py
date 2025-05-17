@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     jwt_cookie_name: str = 'TelekomTestCookie'
     jwt_secret: str = 'a99ef8a3a0734e2d820dc323a29b787235ab7ec504a870ca0ff8c9df5f058042'
     jwt_algorithm: str = 'HS256'
+    bcrypt_salt: bytes = b'$2b$12$zLOG0G7NjDvxAgnae7srnu'
 
 
 settings = Settings()

@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 
 import app.models as models
 import app.tables as tables
-from app.settings import settings
+from app.settings import settings, timezone
 
 
 class AuthService:
@@ -30,9 +30,9 @@ class AuthService:
         return bcrypt.checkpw(password_byte_enc, hashed_password_byte_enc)
 
     @staticmethod
-    def hash_string(data: str) -> str:
+    def hash_string(data: str, random_salt: bool = True) -> str:
         pwd_bytes = data.encode('utf-8')
-        salt = bcrypt.gensalt()
+        salt = bcrypt.gensalt() if random_salt else settings.bcrypt_salt
         hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
         return hashed_password.decode('utf-8')
 
@@ -71,7 +71,7 @@ class AuthService:
         user_data = models.UserJWT(
             id=user.id,
             roles=[r.name for r in user.roles])
-        now = datetime.now()
+        now = datetime.now(timezone)
         payload = {
             'iat': now,
             'nbf': now,
@@ -94,7 +94,7 @@ class AuthService:
             select(tables.RefreshSession)
             .where(
                 tables.RefreshSession.token_hash == hashed_token,
-                tables.RefreshSession.expires_in <= datetime.now()))
+                tables.RefreshSession.expires_in >= datetime.now(timezone)))
 
     def login(self, email: str, password: str, ip_address: str, user_agent: str) -> models.Token:
         """
@@ -130,7 +130,7 @@ class AuthService:
         :return: Модель отображения с Access и Refresh токенами
         """
 
-        hashed_token = self.hash_string(refresh_token)
+        hashed_token = self.hash_string(refresh_token, random_salt=False)
         refresh_session = self.get_refresh_session(hashed_token)
         if not refresh_session:
             raise HTTPError(status=HTTPStatus.UNAUTHORIZED, message='Token expired or invalid')
@@ -155,7 +155,7 @@ class AuthService:
             delete(tables.RefreshSession)
             .where(
                 tables.RefreshSession.user_id == user_id,
-                tables.RefreshSession.expires_in > datetime.now()))
+                tables.RefreshSession.expires_in > datetime.now(timezone)))
 
     def _create_refresh_session(self, refresh_token: str,
                                 user_id: int, ip_address: str, user_agent: str) -> tables.RefreshSession:
@@ -169,10 +169,10 @@ class AuthService:
         :return: Сущность "Сессия для обновления JWT"
         """
 
-        now = datetime.now()
+        now = datetime.now(timezone)
         return tables.RefreshSession(
             user_id=user_id,
-            token_hash=self.hash_string(refresh_token),
+            token_hash=self.hash_string(refresh_token, random_salt=False),
             created_at=now,
             expires_in=now + timedelta(seconds=settings.jwt_refresh_token_expires_s),
             ip_address=ip_address,
