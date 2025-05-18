@@ -7,8 +7,7 @@ import cherrypy
 from cherrypy import HTTPError
 from jose import JWTError, jwt
 from pydantic import ValidationError
-from sqlalchemy import delete
-from sqlalchemy import select
+from sqlalchemy import select, delete, func
 from sqlalchemy.orm import Session
 
 import app.models as models
@@ -95,7 +94,7 @@ class AuthService:
             select(tables.RefreshSession)
             .where(
                 tables.RefreshSession.token_hash == hashed_token,
-                tables.RefreshSession.expires_in >= datetime.now(timezone)))
+                tables.RefreshSession.expires_in >= func.now()))
 
     def login(self, email: str, password: str, ip_address: str, user_agent: str) -> models.Token:
         """
@@ -195,7 +194,7 @@ class AuthService:
             delete(tables.RefreshSession)
             .where(
                 tables.RefreshSession.user_id == user_id,
-                tables.RefreshSession.expires_in > datetime.now(timezone)))
+                tables.RefreshSession.expires_in > func.now()))
 
     def _create_refresh_session(self, refresh_token: str,
                                 user_id: int, ip_address: str, user_agent: str) -> tables.RefreshSession:
