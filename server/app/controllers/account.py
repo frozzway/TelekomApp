@@ -37,3 +37,13 @@ class AccountController:
         return auth_service.refresh_token(
             ip_address=cherrypy.request.remote.ip,
             user_agent=cherrypy.request.headers.get('User-Agent', ''))
+
+    @cherrypy.expose
+    @inject
+    def logout(self, auth_service: AuthServiceDp, **kwargs) -> None:
+        """
+        Метод выхода из системы
+        :param auth_service: Сервис авторизации
+        """
+
+        auth_service.logout()

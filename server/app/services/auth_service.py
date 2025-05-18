@@ -133,7 +133,7 @@ class AuthService:
         raise self.exception
 
     @staticmethod
-    def _set_refresh_token(token: str) -> None:
+    def _set_refresh_token(token: str | None) -> None:
         """
         Установить Refresh Token в cookie
         :param token: Значение токена
@@ -146,6 +146,24 @@ class AuthService:
         cherrypy.response.cookie[settings.jwt_cookie_name]['samesite'] = 'Strict'
         cherrypy.response.cookie[settings.jwt_cookie_name]['expires'] = settings.jwt_refresh_token_expires_s
 
+    def _get_refresh_session(self) -> tables.RefreshSession:
+        """Получить сущность 'Сессия для обновления JWT' по токену из cookie"""
+
+        refresh_token = self._get_refresh_token()
+        hashed_token = self.hash_string(refresh_token, random_salt=False)
+        refresh_session = self.get_refresh_session(hashed_token)
+        if not refresh_session:
+            raise HTTPError(status=HTTPStatus.UNAUTHORIZED, message='Token expired or invalid')
+        return refresh_session
+
+    def logout(self) -> None:
+        """Удалить сессию из базы и очистить Refresh токен из cookie"""
+
+        refresh_session = self._get_refresh_session()
+        self.session.delete(refresh_session)
+        self.session.commit()
+        self._set_refresh_token(None)
+
     def refresh_token(self, ip_address: str, user_agent: str) -> models.Token:
         """
         Обновить сессию, выпустив новый Access токен и заменив Refresh
@@ -154,11 +172,7 @@ class AuthService:
         :param user_agent: юзер-агент из запроса
         :return: Модель отображения с Access и Refresh токенами
         """
-        refresh_token = self._get_refresh_token()
-        hashed_token = self.hash_string(refresh_token, random_salt=False)
-        refresh_session = self.get_refresh_session(hashed_token)
-        if not refresh_session:
-            raise HTTPError(status=HTTPStatus.UNAUTHORIZED, message='Token expired or invalid')
+        refresh_session = self._get_refresh_session()
         user_id = refresh_session.user_id
         self._remove_expired_sessions(user_id)
         self.session.delete(refresh_session)

@@ -39,9 +39,18 @@ def start_cherrypy():
         }
     }
 
+    account_config = {
+        '/': {
+            'tools.json_in.on': False
+        },
+        '/login': {
+            'tools.json_in.on': True
+        }
+    }
+
     cherrypy.tree.mount(controllers.EquipmentController(), '/api/equipment', config=rest_config)
     cherrypy.tree.mount(controllers.EquipmentTypeController(), '/api/equipment-type', config=rest_config)
-    cherrypy.tree.mount(controllers.AccountController(), '/api/account')
+    cherrypy.tree.mount(controllers.AccountController(), '/api/account', config=account_config)
     cherrypy.engine.start()
     cherrypy.engine.block()
 
