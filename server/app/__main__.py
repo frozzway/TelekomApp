@@ -57,7 +57,6 @@ def start_cherrypy():
 
 run_migrations()
 container = Container()
-container.init_resources()
 container.wire(modules=[controllers])
 prefill_data(container.prefill_service())
 start_cherrypy()

@@ -1,6 +1,6 @@
 from dependency_injector import containers, providers
 
-from app.database import session_maker
+from app.database import get_session
 from app.services import EquipmentService
 from app.services import EquipmentTypeService
 from app.services import PrefillService
@@ -8,7 +8,7 @@ from app.services import AuthService
 
 
 class Container(containers.DeclarativeContainer):
-    session = providers.Factory(session_maker)
+    session = providers.Resource(get_session)
     equipment_type_service = providers.Factory(
         EquipmentTypeService,
         session=session,

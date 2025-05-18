@@ -19,3 +19,10 @@ url_object = URL.create(
 
 engine = create_engine(url_object)
 session_maker = sessionmaker(bind=engine)
+
+def get_session():
+    session = session_maker()
+    try:
+        yield session
+    finally:
+        session.close()
