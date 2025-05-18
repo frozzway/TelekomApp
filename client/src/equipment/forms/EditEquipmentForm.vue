@@ -1,6 +1,6 @@
 <script>
-import {defineComponent} from 'vue'
-import {isValidSerialNumber} from "@/utils.js"
+import { defineComponent } from 'vue'
+import { isValidSerialNumber } from "@/scripts/utils.js"
 import EquipmentApi from "@/api/EquipmentApi.js";
 import EquipmentTypeApi from "@/api/EquipmentTypeApi.js";
 

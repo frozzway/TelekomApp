@@ -1,9 +1,9 @@
 <script>
-import {defineComponent} from 'vue'
-import {BForm, BFormInvalidFeedback, BFormTextarea} from "bootstrap-vue-next";
+import { defineComponent } from 'vue'
+import { BForm, BFormInvalidFeedback, BFormTextarea } from "bootstrap-vue-next";
 import EquipmentApi from "@/api/EquipmentApi.js";
 import EquipmentTypeApi from "@/api/EquipmentTypeApi.js";
-import {filterInvalidSerialNumbers} from "@/utils.js"
+import { filterInvalidSerialNumbers } from "@/scripts/utils.js"
 
 
 export default defineComponent({
