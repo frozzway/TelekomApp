@@ -4,12 +4,6 @@ services:
       context: ./server
       dockerfile: Dockerfile
     container_name: telekom_server
-    environment:
-      - db_host=mysql
-      - db_username=telekom
-      - db_port=3306
-      - server_environment=production
-      - server_port=8000
 
   web:
     build:

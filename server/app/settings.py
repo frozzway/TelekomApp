@@ -2,10 +2,15 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from alembic.config import Config
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=('.env.production', '.env.development'),
+        env_file_encoding='utf-8'
+    )
+
     server_host: str = '0.0.0.0'
     server_port: int = '5007'
     timezone: str = 'Asia/Yekaterinburg'
