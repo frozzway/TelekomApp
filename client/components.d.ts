@@ -22,12 +22,10 @@ declare module 'vue' {
     BPagination: typeof import('bootstrap-vue-next/components/BPagination')['BPagination']
     BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']
     BTable: typeof import('bootstrap-vue-next/components/BTable')['BTable']
-    IBi0Circle: typeof import('~icons/bi/0-circle')['default']
-    IIcTwotoneRefresh: typeof import('~icons/ic/twotone-refresh')['default']
-    IMaterialSymbolsAdd: typeof import('~icons/material-symbols/add')['default']
     IMaterialSymbolsDeleteOutlineSharp: typeof import('~icons/material-symbols/delete-outline-sharp')['default']
-    IMaterialSymbolsDeleteRounded: typeof import('~icons/material-symbols/delete-rounded')['default']
     IMaterialSymbolsEditRounded: typeof import('~icons/material-symbols/edit-rounded')['default']
     IMaterialSymbolsRefresh: typeof import('~icons/material-symbols/refresh')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
 }

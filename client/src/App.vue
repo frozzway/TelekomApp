@@ -1,16 +1,9 @@
 <script>
-import EquipmentPage from "@/equipment/EquipmentPage.vue";
-export default {
-  components: {
-    EquipmentPage,
-  }
-}
+export default {}
 </script>
 
 <template>
-  <BContainer fluid="xl" class="mt-2">
-    <EquipmentPage />
-  </BContainer>
+  <RouterView />
 </template>
 
 <style scoped>

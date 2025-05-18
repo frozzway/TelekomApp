@@ -15,6 +15,8 @@ import {
 import CreateEquipmentForm from "@/equipment/forms/CreateEquipmentForm.vue";
 import EditEquipmentForm from "@/equipment/forms/EditEquipmentForm.vue";
 import EquipmentApi from "@/api/EquipmentApi.js";
+import AccountApi from "@/api/AccountApi.js";
+import { removeAccessToken } from "@/scripts/auth.js";
 
 
 export default defineComponent({
@@ -159,6 +161,11 @@ export default defineComponent({
       await EquipmentApi.delete(item.id)
       this.refresh()
       alert('Успешно удалено')
+    },
+    async logout() {
+      await AccountApi.logout()
+      removeAccessToken()
+      await this.$router.push('/login')
     }
   },
   watch: {
@@ -202,6 +209,18 @@ export default defineComponent({
   </BModal>
 
   <!-- Верхняя панель с кнопками -->
+  <BRow class="mb-2" align-v="center">
+    <BCol>
+      Управление: <h5>Оборудование</h5>
+    </BCol>
+    <BCol>
+      <BRow align-h="end">
+        <BCol cols="auto">
+          <BButton variant="outline-secondary" @click="logout()">Выйти</BButton>
+        </BCol>
+      </BRow>
+    </BCol>
+  </BRow>
   <BRow>
     <BCol cols="12" md="auto">
       <BButton variant="primary" @click="openCreateForm()">
