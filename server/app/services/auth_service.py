@@ -185,7 +185,7 @@ class AuthService:
 
     def _remove_expired_sessions(self, user_id: int) -> None:
         """
-        Удалить из базы все сессии с истеченным сроком жизни для пользователя
+        Удалить из базы все сессии с истекшим сроком жизни для пользователя
 
         :param user_id: Идентификатор пользователя
         """
@@ -194,7 +194,7 @@ class AuthService:
             delete(tables.RefreshSession)
             .where(
                 tables.RefreshSession.user_id == user_id,
-                tables.RefreshSession.expires_in > func.now()))
+                tables.RefreshSession.expires_in < func.now()))
 
     def _create_refresh_session(self, refresh_token: str,
                                 user_id: int, ip_address: str, user_agent: str) -> tables.RefreshSession:
