@@ -1,6 +1,6 @@
 from cherrypy import HTTPError
 from sqlalchemy import select, func
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, scoped_session
 
 from app.models import EquipmentTypeFilterDto
 from app.models import EquipmentTypeVm
@@ -12,8 +12,8 @@ from app.tables import EquipmentType
 class EquipmentTypeService:
     """Сервис для работы с сущностью 'Тип оборудования'"""
 
-    def __init__(self, session: Session):
-        self.session = session
+    def __init__(self, session: scoped_session[Session]):
+        self.session = session()
 
     def get_entities(self, query: PaginatedQuery[EquipmentTypeFilterDto]) -> PaginatedQueryResult[EquipmentTypeVm]:
         """

@@ -3,7 +3,7 @@ import re
 from cherrypy import HTTPError
 from sqlalchemy import select, func
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, scoped_session
 
 from app.services import EquipmentTypeService
 from app.tables import EquipmentType, Equipment
@@ -17,8 +17,8 @@ class EquipmentService:
 
     conflict_message = "Оборудование с таким серийным номером уже существует для этого типа"
 
-    def __init__(self, session: Session, equipment_type_service: EquipmentTypeService):
-        self.session = session
+    def __init__(self, session: scoped_session[Session], equipment_type_service: EquipmentTypeService):
+        self.session = session()
         self.equipment_type_service = equipment_type_service
 
     def create_equipments(self, dto: EquipmentCreateDto) -> EquipmentCreateResult:

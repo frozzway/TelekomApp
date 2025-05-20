@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, scoped_session
 
 from app.models import EquipmentTypePrefillDto
 from app.services import AuthService
@@ -15,8 +15,8 @@ class PrefillService:
 
     equipment_type_path = Path.cwd() / "resources" / "equipment_types.json"
 
-    def __init__(self, session: Session):
-        self.session = session
+    def __init__(self, session: scoped_session[Session]):
+        self.session = session()
 
     def prefill_equipment_types(self):
         """Метод предзаполнения сущности 'Тип оборудования'"""

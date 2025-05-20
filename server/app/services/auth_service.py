@@ -8,7 +8,7 @@ from cherrypy import HTTPError
 from jose import JWTError, jwt
 from pydantic import ValidationError
 from sqlalchemy import select, delete, func
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, scoped_session
 
 import app.models as models
 import app.tables as tables
@@ -20,8 +20,8 @@ class AuthService:
 
     exception = HTTPError(status=HTTPStatus.UNAUTHORIZED, message='Could not validate credentials')
 
-    def __init__(self, session: Session):
-        self.session = session
+    def __init__(self, session: scoped_session[Session]):
+        self.session = session()
 
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
