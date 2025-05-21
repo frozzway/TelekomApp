@@ -2,10 +2,10 @@ import cherrypy
 from alembic import command
 
 from app import controllers
-from app.container import Container
+from app import tools  # type: ignore[import]
+from app.container import container
 from app.services import PrefillService
 from app.settings import settings, alembic_cfg
-from app import tools  # type: ignore[import]
 
 
 def run_migrations():
@@ -29,6 +29,7 @@ def start_cherrypy():
         'tools.pydantic_dump.on': True,
         'tools.json_in.on': True,
         'tools.json_out.on': True,
+        'tools.resources_shutdown.on': True,
         'error_page.default': tools.jsonify_error
     })
 
@@ -56,8 +57,8 @@ def start_cherrypy():
 
 
 run_migrations()
-container = Container()
 container.wire(modules=[controllers])
 prefill_data(container.prefill_service())
+container.shutdown_resources()
 start_cherrypy()
 

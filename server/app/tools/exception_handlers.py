@@ -2,6 +2,8 @@ import json
 
 import cherrypy
 
+from app.container import container
+
 
 def jsonify_error(status: str, message: str, traceback: str, version: str) -> str:
     """
@@ -29,3 +31,20 @@ def jsonify_error(status: str, message: str, traceback: str, version: str) -> st
         'status': status,
         'error': message,
     })
+
+
+@cherrypy.tools.register('before_handler', priority=20)
+def resources_shutdown():
+    """Tool для завершения работы всех ресурсов в случае возникновения исключения на обработчике запроса"""
+
+    handler = cherrypy.request.handler
+    if handler:
+        original_handler = handler
+
+        def wrapper(*args, **kwargs):
+            try:
+                return original_handler(*args, **kwargs)
+            finally:
+                container.shutdown_resources()
+
+        cherrypy.request.handler = wrapper

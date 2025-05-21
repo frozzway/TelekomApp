@@ -26,3 +26,6 @@ class Container(containers.DeclarativeContainer):
         AuthService,
         session=session,
     )
+
+
+container = Container()
