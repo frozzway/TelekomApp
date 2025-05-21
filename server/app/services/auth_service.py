@@ -135,6 +135,7 @@ class AuthService:
     def _set_refresh_token(token: str | None) -> None:
         """
         Установить Refresh Token в cookie
+
         :param token: Значение токена
         """
 
@@ -171,6 +172,7 @@ class AuthService:
         :param user_agent: юзер-агент из запроса
         :return: Модель отображения с Access и Refresh токенами
         """
+
         refresh_session = self._get_refresh_session()
         user_id = refresh_session.user_id
         self._remove_expired_sessions(user_id)

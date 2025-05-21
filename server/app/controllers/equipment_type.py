@@ -16,6 +16,7 @@ class EquipmentTypeController:
     def GET(self, equipment_type_service: EquipmentTypeServiceDp, **kwargs) -> PaginatedQueryResult[EquipmentTypeVm]:
         """
         Метод получения табличных данных сущности 'Тип оборудования'
+
         :param equipment_type_service: Сервис для работы с сущностью 'Тип оборудования'
         :return: Данные для подстановки в таблицу
         """

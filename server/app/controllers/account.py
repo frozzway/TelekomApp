@@ -14,6 +14,7 @@ class AccountController:
     def login(self, auth_service: AuthServiceDp, **kwargs) -> models.Token:
         """
         Метод авторизации пользователя по учетным данным
+
         :param auth_service: Сервис авторизации
         :return: Access и Refresh токены
         """
@@ -30,6 +31,7 @@ class AccountController:
     def refresh_session(self, auth_service: AuthServiceDp, **kwargs) -> models.Token:
         """
         Метод обновления сессии пользователя
+
         :param auth_service: Сервис авторизации
         :return: Access и Refresh токены новой сессии
         """
@@ -43,6 +45,7 @@ class AccountController:
     def logout(self, auth_service: AuthServiceDp, **kwargs) -> None:
         """
         Метод выхода из системы
+
         :param auth_service: Сервис авторизации
         """
 
